@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDisclosure } from "@mantine/hooks";
 import { Popover, Stack, TextInput, UnstyledButton } from "@mantine/core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
@@ -15,7 +16,7 @@ function IconPicker(
   { value, onChange, label = "Choisir une icône" }: IconPickerProps,
 ) {
   const [search, setSearch] = useState("");
-  const [opened, setOpened] = useState(false);
+  const [opened, { toggle: toggleOpened }] = useDisclosure(false);
   const [selectedType, setSelectedType] = useState<
     "solid" | "regular" | "brands"
   >("solid");
@@ -41,10 +42,10 @@ function IconPicker(
   const iconList = getIconList();
 
   return (
-    <Popover opened={opened} onChange={setOpened}>
+    <Popover opened={opened} onChange={toggleOpened}>
       <Popover.Target>
         <UnstyledButton
-          onClick={() => setOpened(true)}
+          onClick={toggleOpened}
           style={{
             padding: "8px",
             border: "1px solid #e0e0e0",
@@ -132,7 +133,7 @@ function IconPicker(
                   key={icon}
                   onClick={() => {
                     onChange(icon);
-                    setOpened(false);
+                    toggleOpened();
                   }}
                   onMouseEnter={() => setHoveredIcon(icon)}
                   onMouseLeave={() => setHoveredIcon(null)}
